@@ -780,3 +780,10 @@ if (window.innerWidth <= 768) {
      orb.style.display = 'none';
  });
 }
+
+document.querySelectorAll('.faq-question, .caso-title').forEach(button => {
+  button.addEventListener('click', () => {
+    const item = button.parentElement;
+    item.classList.toggle('active');
+  });
+});

@@ -377,7 +377,14 @@
     font-size: clamp(3rem, 8vw, 5rem);
     margin-bottom: var(--space-lg);
     animation: fadeInUp 0.6s ease 0.2s both;
-  }
+}
+
+.subtitle-line {
+    font-size: clamp(1.5rem, 4vw, 2.5rem); /* Ajusta el tamaño para que sea más pequeño */
+    font-weight: 400; /* Puedes hacerlo más delgado para diferenciarlo */
+    display: block; /* Asegura que se muestre en una nueva línea */
+    margin-top: 10px; /* Espaciado entre el título y el subtítulo */
+}
   
   .title-line {
     display: block;
@@ -752,18 +759,16 @@
     transition: var(--transition);
   }
   
-  .service-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
+  
   
   .service-card:hover::before {
     transform: scaleX(1);
   }
   
-  .service-card.featured {
-    background: linear-gradient(135deg, rgba(255, 159, 85, 0.05), rgba(194, 105, 145, 0.05));
-  }
+  .services .service-card.featured {
+  background: rgba(255, 255, 255, 0.02); /* igual a los demás */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
   
   .service-glow {
     position: absolute;
@@ -1167,13 +1172,25 @@
   
   /* Ideal Para Section */
   .ideal-para {
-    margin-top: var(--space-xl);
-    text-align: center;
-    padding: var(--space-lg);
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
+  margin-top: var(--space-xl);
+  text-align: center;
+  padding: var(--space-lg);
+  
+  /* 1. Fondo oscuro y semitransparente para mejor contraste */
+  background: rgba(18, 18, 26, 0.25); /* Usamos un fondo oscuro translúcido */
+
+  /* 2. El efecto "cristal" que desenfoca lo que está detrás */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Para compatibilidad con Safari */
+  
+  border-radius: 16px;
+
+  /* 3. Un borde más suave que complementa el efecto */
+  border: 1px solid rgba(255, 255, 255, 0.15); 
+  
+  /* 4. (Opcional) Una sombra sutil para darle profundidad */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
   
   .ideal-label {
     font-size: 0.9rem;
@@ -1320,18 +1337,30 @@
   }
   
   /* Responsive */
-  @media (max-width: 768px) {
+ @media (max-width: 768px) {
+    /* --- Arreglos Generales --- */
+    body {
+      cursor: auto !important;
+    }
+
+    .custom-cursor,
+    .cursor-follower {
+      display: none !important;
+    }
+  
+    /* --- Arreglos de Navegación --- */
     .nav-menu {
       position: fixed;
-      top: 70px;
+      top: 60px; /* Reducimos un poco para que se vea mejor */
       left: -100%;
       width: 100%;
-      height: calc(100vh - 70px);
+      height: calc(100vh - 60px);
       background: var(--bg-primary);
       flex-direction: column;
+      align-items: center; /* Centramos los links */
       padding: var(--space-xl);
       gap: var(--space-lg);
-      transition: var(--transition);
+      transition: var(--transition-slow); /* Hacemos la transición más suave */
     }
     
     .nav-menu.active {
@@ -1346,33 +1375,55 @@
       transform: rotate(45deg) translate(5px, 5px);
     }
     
+    .nav-toggle.active span:nth-child(2) {
+      opacity: 0; /* Ocultamos la línea del medio */
+    }
+    
     .nav-toggle.active span:last-child {
       transform: rotate(-45deg) translate(5px, -5px);
     }
     
+    /* --- ARREGLO: Hero Section --- */
+    .hero {
+      padding: var(--space-2xl) var(--space-lg); /* Más espacio vertical, menos horizontal */
+      text-align: center;
+    }
+    
     .hero-visual {
-      display: none;
+      display: none; /* Ocultamos las tarjetas flotantes que molestan */
     }
     
     .hero-actions {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center; /* Centramos los botones */
+      gap: var(--space-md);
     }
     
     .hero-stats {
-      flex-direction: column;
-      gap: var(--space-lg);
-      align-items: flex-start;
-    }
-    
-    .about-content,
-    .contact-content {
-      grid-template-columns: 1fr;
+      justify-content: center; /* Centramos las estadísticas */
       gap: var(--space-xl);
     }
     
+    /* --- ARREGLO: Sección "Sobre Nosotros" --- */
+    .about {
+        overflow-x: hidden; /* Evita cualquier desbordamiento horizontal */
+    }
+
+    .about-content {
+        display: flex;          /* Cambiamos de 'grid' a 'flex' */
+        flex-direction: column; /* Forzamos la dirección vertical (apilado) */
+        gap: var(--space-xl);
+    }
+    
     .code-window {
-      transform: none;
+      transform: none; /* Eliminamos la rotación 3D que causa el scroll */
+      max-width: 100%; /* Aseguramos que no sea más ancho que la pantalla */
+    }
+    
+    /* --- Otros Arreglos --- */
+    .contact-content {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
     }
     
     .form-row {
@@ -1403,13 +1454,169 @@
       grid-template-columns: 1fr;
       gap: var(--space-lg);
     }
-    
-    .custom-cursor,
-    .cursor-follower {
-      display: none !important;
-    }
-    
-    body {
-      cursor: auto !important;
-    }
+}
+
+/* Competencia & SEO Section */
+.competencia-seo {
+  padding: var(--space-3xl) 0;
+  background: var(--bg-secondary);
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+}
+
+.competencia-seo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(255, 159, 85, 0.08), transparent 60%),
+              radial-gradient(circle at 70% 60%, rgba(197, 105, 145, 0.08), transparent 60%);
+  pointer-events: none;
+}
+
+.competencia-seo .section-header {
+  position: relative;
+  z-index: 2;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-xl);
+  margin-top: var(--space-2xl);
+  position: relative;
+  z-index: 2;
+}
+
+.seo-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: var(--space-lg);
+  transition: var(--transition);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.seo-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(255, 159, 85, 0.3);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+}
+
+.seo-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--gradient-primary);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  margin-bottom: var(--space-md);
+}
+
+.seo-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: var(--space-sm);
+  color: var(--text-primary);
+}
+
+.seo-card p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Responsive ajustes */
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
   }
+}
+/* FAQ & Casos de Éxito */
+.faq-section, .casos-section {
+  padding: var(--space-3xl) 0;
+  background: var(--bg-secondary);
+}
+
+.faq-container, .casos-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.faq-item, .caso-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  margin-bottom: var(--space-md);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.faq-question, .caso-title {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  text-align: left;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-question:hover, .caso-title:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.faq-question i, .caso-title i {
+  transition: transform 0.3s ease;
+}
+
+.faq-item.active i, .caso-item.active i {
+  transform: rotate(180deg);
+}
+
+.faq-answer, .caso-content {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 var(--space-lg);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+}
+.faq-item:hover {
+  border-color: rgba(255, 159, 85, 0.3);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.faq-item.active .faq-answer,
+.caso-item.active .caso-content {
+  max-height: 300px;
+  padding: var(--space-md) var(--space-lg);
+}
+.casos-section {
+  background: transparent; /* igual a la página principal */
+}
+
+.caso-item {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  margin-bottom: var(--space-md);
+  transition: var(--transition);
+}
+
+.caso-item:hover {
+  border-color: rgba(255, 159, 85, 0.3);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+}
