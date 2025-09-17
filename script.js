@@ -234,6 +234,20 @@ contactForm.addEventListener('submit', async (e) => {
  const submitBtn = contactForm.querySelector('.btn-submit');
  const originalText = submitBtn.innerHTML;
  
+ // Recopilar datos del formulario
+ const formData = {
+     name: document.getElementById('name').value.trim(),
+     email: document.getElementById('email').value.trim(),
+     company: document.getElementById('company').value.trim(),
+     message: document.getElementById('message').value.trim()
+ };
+ 
+ // Validación básica
+ if (!formData.name || !formData.email || !formData.message) {
+     showNotification('Por favor, completa todos los campos requeridos.', 'error');
+     return;
+ }
+ 
  // Loading state
  submitBtn.innerHTML = `
      <span>Enviando</span>
@@ -245,26 +259,62 @@ contactForm.addEventListener('submit', async (e) => {
  `;
  submitBtn.disabled = true;
  
- // Simular envío
- await new Promise(resolve => setTimeout(resolve, 2000));
- 
- // Success state
- submitBtn.innerHTML = `
-     <span>¡Mensaje enviado!</span>
-     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-         <path d="M5 10L8 13L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-     </svg>
- `;
- 
- // Mostrar partículas de celebración
- createParticles(submitBtn);
- 
- // Reset form
- setTimeout(() => {
-     contactForm.reset();
-     submitBtn.innerHTML = originalText;
-     submitBtn.disabled = false;
- }, 3000);
+ try {
+     // Enviar datos al servidor
+     const response = await fetch('contact.php', {
+         method: 'POST',
+         headers: {
+             'Content-Type': 'application/json',
+         },
+         body: JSON.stringify(formData)
+     });
+     
+     const result = await response.json();
+     
+     if (result.success) {
+         // Success state
+         submitBtn.innerHTML = `
+             <span>¡Mensaje enviado!</span>
+             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                 <path d="M5 10L8 13L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+             </svg>
+         `;
+         
+         // Mostrar partículas de celebración
+         createParticles(submitBtn);
+         
+         // Mostrar notificación de éxito
+         showNotification(result.message, 'success');
+         
+         // Reset form
+         setTimeout(() => {
+             contactForm.reset();
+             submitBtn.innerHTML = originalText;
+             submitBtn.disabled = false;
+         }, 3000);
+     } else {
+         throw new Error(result.message || 'Error al enviar el mensaje');
+     }
+ } catch (error) {
+     console.error('Error:', error);
+     
+     // Error state
+     submitBtn.innerHTML = `
+         <span>Error al enviar</span>
+         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+             <path d="M6 6L14 14M6 14L14 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+         </svg>
+     `;
+     
+     // Mostrar notificación de error
+     showNotification(error.message || 'Error al enviar el mensaje. Por favor, intenta de nuevo.', 'error');
+     
+     // Reset button after error
+     setTimeout(() => {
+         submitBtn.innerHTML = originalText;
+         submitBtn.disabled = false;
+     }, 3000);
+ }
 });
 
 // Crear partículas de celebración
@@ -280,10 +330,10 @@ function createParticles(element) {
          height: 8px;
          background: ${colors[Math.floor(Math.random() * colors.length)]};
          border-radius: 50%;
+         pointer-events: none;
+         z-index: 10000;
          left: ${rect.left + rect.width / 2}px;
          top: ${rect.top + rect.height / 2}px;
-         pointer-events: none;
-         z-index: 9999;
      `;
      
      document.body.appendChild(particle);
@@ -314,6 +364,33 @@ function createParticles(element) {
      
      requestAnimationFrame(animate);
  }
+}
+
+// Función para mostrar notificaciones
+function showNotification(message, type = 'info') {
+ // Remover notificación existente si la hay
+ const existingNotification = document.querySelector('.notification');
+ if (existingNotification) {
+     existingNotification.remove();
+ }
+ 
+ const notification = document.createElement('div');
+ notification.className = `notification notification-${type}`;
+ notification.innerHTML = `
+     <div class="notification-content">
+         <span class="notification-message">${message}</span>
+         <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+     </div>
+ `;
+ 
+ document.body.appendChild(notification);
+ 
+ // Auto-remove after 5 seconds
+ setTimeout(() => {
+     if (notification.parentElement) {
+         notification.remove();
+     }
+ }, 5000);
 }
 
 // Efecto hover en service cards
