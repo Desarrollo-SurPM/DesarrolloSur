@@ -1707,3 +1707,19 @@
     border-color: rgba(255, 255, 255, 0.2);
     transform: translateX(2px);
   }
+
+  /* Reglas defensivas para despliegue en cPanel */
+  a.client-entry,
+  a.client-entry * {
+    color: var(--text-primary) !important;
+    text-decoration: none !important;
+  }
+
+  a.client-entry:hover {
+    text-decoration: none !important;
+  }
+
+  img.client-logo {
+    max-width: 48px !important;
+    height: 48px !important;
+  }
