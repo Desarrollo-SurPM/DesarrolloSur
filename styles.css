@@ -1657,8 +1657,8 @@
  
  /* Imagen de logo real */
  .client-logo {
-    width: 64px;
-    height: 64px;
+    width: 48px;
+    height: 48px;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1671,4 +1671,39 @@
   .client-link {
     text-decoration: none;
     color: inherit;
+  }
+
+  /* Layout de cliente y flecha de enlace */
+  .client-entry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .client-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .client-link-arrow {
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: transparent;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .client-link-arrow:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(2px);
   }
